@@ -20,6 +20,9 @@ BITMAP *nodo_cuerpo;
 BITMAP *corazon;
 BITMAP *comida;
 BITMAP *game;
+SAMPLE *snake_sound;
+SAMPLE *death;
+SAMPLE *success;
 int LIMITE_X=LARGO/20;
 int LIMITE_Y=ANCHO/20;
 int DIR = DERECHA;
@@ -38,8 +41,11 @@ void setup(){
     buffer= create_bitmap(LARGO,ANCHO);
     srand(time(NULL));
     set_gfx_mode(GFX_AUTODETECT_WINDOWED,LARGO,ANCHO,0,0);
+    install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, "pong");
     //buffer= create_bitmap(LARGO,ANCHO);
-
+snake_sound= load_sample("../apple-eating-36127.wav");
+    death= load_sample("../death.wav");
+    success= load_sample("../success-fanfare-trumpets-6185.wav");
     cabeza= create_bitmap(20,20);
     cabeza_up= create_bitmap(20,20);
     cabeza_down= create_bitmap(20,20);
@@ -90,6 +96,7 @@ void generar_comida(){
         }
         else{
             c++;
+            play_sample(snake_sound, 255, 128, 1000, 0);
         }
 
     }
@@ -159,6 +166,7 @@ void perder_vida1(){
     if(VIDAS>0){
         clear(screen);
         textout_ex(screen,font,"Vous avez perdue une vie",40*10,40*9,0xFFFFFF,0x00000);
+        play_sample(death, 255, 128, 1000, 0);
         rest(2000);
     }
     else{
@@ -330,11 +338,17 @@ void salida(){
         textout_ex(screen,font,"EGALITE !!!!!!",LARGO/2,ANCHO/2,0xFFFFFF,0x000000);
         rest(5000);
     }
+
     clear(screen);
     stretch_blit(game, screen, 0, 0, game->w, game->h,
                  0, 0, LARGO, ANCHO);
-    allegro_message("resume des points joueur 1 : %d points , joueur 2 : %d points",PUNTOS2,PUNTOS1);
-    rest(5000);
+    play_sample(success, 255, 128, 1000, 0);
+    while(!key[KEY_ESC]){
+        textout_ex(screen,font,"ESC POUR QUITER",LARGO/8,ANCHO/15,0xFFFFFF,-1);
+        textprintf_ex(screen,font,LARGO/8,ANCHO/8,0xFFFFFF,-1,"resume des points joueur 1 : %d points , joueur 2 : %d points",PUNTOS2,PUNTOS1);
+    }
+
+    rest(1000);
 
 }
 int main() {
