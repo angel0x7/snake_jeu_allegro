@@ -1,3 +1,7 @@
+# Projet Java ING1 2023 : Snake game
+
+**Projet d'informatique avec Allegro du second semestre (ECE ING1)**
+
 # 🐍 Serpent – Mini-jeu dynamique
 
 Ce projet est une implémentation du célèbre jeu **Serpent** (Snake), développé dans le cadre du module ECE World, avec une gestion spécifique par **liste chaînée**.
